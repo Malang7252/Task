@@ -19,11 +19,9 @@ namespace Task.Service.Services.Clients
         Task<ServiceResponse<bool>> DeleteClientAsync(Guid clientId);
 
         // Retrieves a Client by ID
-        Task<ClientDto?> GetClientByIdAsync(Guid clientId);
-
+        Task<ServiceResponse<ClientDto>> GetClientByIdAsync(Guid clientId);
         // Retrieves all Clients
-        Task<IEnumerable<ClientDto>> GetAllClientsAsync();
-
+        Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync();
         // Retrieves a Client along with related Addresses and Accounts
         Task<ClientDto> GetClientWithDetailsAsync(Guid clientId);
     }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Task.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class IntialMig : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,24 @@ namespace Task.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PersonalId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfilePhoto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sex = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,6 +176,48 @@ namespace Task.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Accounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Accounts_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -166,6 +226,43 @@ namespace Task.Data.Migrations
                     { "5bd1711f-38cc-47ce-960b-242d82b86a18", "5bd1711f-38cc-47ce-960b-242d82b86a18", "Admin", "ADMIN" },
                     { "c3129a50-6964-4e12-bff9-9ae3eb32c692", "c3129a50-6964-4e12-bff9-9ae3eb32c692", "User", "USER" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Clients",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "MobileNumber", "PersonalId", "ProfilePhoto", "Sex" },
+                values: new object[,]
+                {
+                    { new Guid("4dedb3ae-a8f5-4d57-8937-e7fb885c8ec2"), "jane.smith@example.com", "Jane", "Smith", "+19876543210", "10987654321", "jane_smith_profile.jpg", "Female" },
+                    { new Guid("9f5009ab-4f17-4649-8085-0278cbe4e7d6"), "john.doe@example.com", "John", "Doe", "+11234567890", "12345678901", "john_doe_profile.jpg", "Male" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Accounts",
+                columns: new[] { "Id", "AccountNumber", "Balance", "ClientId" },
+                values: new object[,]
+                {
+                    { new Guid("714f8ded-b632-4d3f-acac-491841827ac6"), "1234567890", 1000m, new Guid("9f5009ab-4f17-4649-8085-0278cbe4e7d6") },
+                    { new Guid("d91de29a-1fc5-478b-b26a-db8572e422a7"), "0987654321", 500m, new Guid("4dedb3ae-a8f5-4d57-8937-e7fb885c8ec2") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Addresses",
+                columns: new[] { "Id", "City", "ClientId", "Country", "Street", "ZipCode" },
+                values: new object[,]
+                {
+                    { new Guid("1606e4a1-af66-4e4e-b89d-38863cf69ce1"), "New York", new Guid("9f5009ab-4f17-4649-8085-0278cbe4e7d6"), "USA", "123 Main St", "10001" },
+                    { new Guid("951d698a-9588-4241-82d5-45c39428f757"), "Toronto", new Guid("4dedb3ae-a8f5-4d57-8937-e7fb885c8ec2"), "Canada", "456 Maple Ave", "M5V 2T6" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_ClientId",
+                table: "Accounts",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_ClientId",
+                table: "Addresses",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -211,6 +308,12 @@ namespace Task.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Accounts");
+
+            migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -224,6 +327,9 @@ namespace Task.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

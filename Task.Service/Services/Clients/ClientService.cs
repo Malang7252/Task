@@ -23,16 +23,7 @@ namespace Task.Service.Services.Clients
             _mapper = mapper;
         }
 
-        public async Task<ClientDto> GetClientWithDetailsAsync(Guid clientId)
-        {
-            var client = await _clientRepository.FindByInclude(
-                c => c.Id == clientId,
-                c => c.Addresses,
-                c => c.Accounts
-            ).FirstOrDefaultAsync();
 
-            return _mapper.Map<ClientDto>(client);
-        }
 
        public async Task<ServiceResponse<ClientDto>> CreateClientAsync(ClientDto clientDto)
         {
@@ -93,30 +84,57 @@ namespace Task.Service.Services.Clients
             }
         }
 
-        public async Task<IEnumerable<ClientDto>> GetAllClientsAsync()
-        {
-            // Get all entities, including related data if necessary
-            var clients = await _clientRepository
-                .AllIncluding(c => c.Addresses, c => c.Accounts)
-                .ToListAsync();
 
-            // Map the entities to DTOs and return them
-            return _mapper.Map<IEnumerable<ClientDto>>(clients);
+        public async Task<ServiceResponse<ClientDto>> GetClientByIdAsync(Guid clientId)
+        {
+            try
+            {
+                var clientEntity = await _clientRepository.FindAsync(clientId);
+                if (clientEntity == null)
+                    return ServiceResponse<ClientDto>.Return404();
+
+                var clientDto = _mapper.Map<ClientDto>(clientEntity);
+                return ServiceResponse<ClientDto>.ReturnResultWith200(clientDto);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResponse<ClientDto>.ReturnException(ex);
+            }
         }
 
-        public async Task<ClientDto?> GetClientByIdAsync(Guid clientId)
+        public async Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync()
         {
-            var client = await _clientRepository
-                .FindByInclude(c => c.Id == clientId, c => c.Addresses, c => c.Accounts)
-                .FirstOrDefaultAsync();
-
-            if (client == null)
+            try
             {
-                throw new Exception("Client not found");
+                var clientEntities = await _clientRepository.All.ToListAsync();
+                var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(clientEntities);
+                return ServiceResponse<IEnumerable<ClientDto>>.ReturnResultWith200(clientDtos);
             }
+            catch (Exception ex)
+            {
+                return ServiceResponse<IEnumerable<ClientDto>>.ReturnException(ex);
+            }
+        }
 
-            //Domain Model to Dto
+
+        public async Task<ClientDto> GetClientWithDetailsAsync(Guid clientId)
+        {
+            var client = await _clientRepository.FindByInclude(
+                c => c.Id == clientId,
+                c => c.Addresses,
+                c => c.Accounts
+            ).FirstOrDefaultAsync();
+
             return _mapper.Map<ClientDto>(client);
         }
+
+
+
+
+
+
+
+
+
     }
 }

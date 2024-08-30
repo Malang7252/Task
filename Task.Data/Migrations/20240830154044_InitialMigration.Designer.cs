@@ -12,8 +12,8 @@ using Task.Data;
 namespace Task.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240830011334_IntialMig")]
-    partial class IntialMig
+    [Migration("20240830154044_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -239,6 +239,160 @@ namespace Task.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Task.Models.Entities.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("714f8ded-b632-4d3f-acac-491841827ac6"),
+                            AccountNumber = "1234567890",
+                            Balance = 1000m,
+                            ClientId = new Guid("9f5009ab-4f17-4649-8085-0278cbe4e7d6")
+                        },
+                        new
+                        {
+                            Id = new Guid("d91de29a-1fc5-478b-b26a-db8572e422a7"),
+                            AccountNumber = "0987654321",
+                            Balance = 500m,
+                            ClientId = new Guid("4dedb3ae-a8f5-4d57-8937-e7fb885c8ec2")
+                        });
+                });
+
+            modelBuilder.Entity("Task.Models.Entities.Address", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1606e4a1-af66-4e4e-b89d-38863cf69ce1"),
+                            City = "New York",
+                            ClientId = new Guid("9f5009ab-4f17-4649-8085-0278cbe4e7d6"),
+                            Country = "USA",
+                            Street = "123 Main St",
+                            ZipCode = "10001"
+                        },
+                        new
+                        {
+                            Id = new Guid("951d698a-9588-4241-82d5-45c39428f757"),
+                            City = "Toronto",
+                            ClientId = new Guid("4dedb3ae-a8f5-4d57-8937-e7fb885c8ec2"),
+                            Country = "Canada",
+                            Street = "456 Maple Ave",
+                            ZipCode = "M5V 2T6"
+                        });
+                });
+
+            modelBuilder.Entity("Task.Models.Entities.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePhoto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9f5009ab-4f17-4649-8085-0278cbe4e7d6"),
+                            Email = "john.doe@example.com",
+                            FirstName = "John",
+                            LastName = "Doe",
+                            MobileNumber = "+11234567890",
+                            PersonalId = "12345678901",
+                            ProfilePhoto = "john_doe_profile.jpg",
+                            Sex = "Male"
+                        },
+                        new
+                        {
+                            Id = new Guid("4dedb3ae-a8f5-4d57-8937-e7fb885c8ec2"),
+                            Email = "jane.smith@example.com",
+                            FirstName = "Jane",
+                            LastName = "Smith",
+                            MobileNumber = "+19876543210",
+                            PersonalId = "10987654321",
+                            ProfilePhoto = "jane_smith_profile.jpg",
+                            Sex = "Female"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -288,6 +442,35 @@ namespace Task.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Task.Models.Entities.Account", b =>
+                {
+                    b.HasOne("Task.Models.Entities.Client", "Client")
+                        .WithMany("Accounts")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("Task.Models.Entities.Address", b =>
+                {
+                    b.HasOne("Task.Models.Entities.Client", "Client")
+                        .WithMany("Addresses")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("Task.Models.Entities.Client", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("Addresses");
                 });
 #pragma warning restore 612, 618
         }
