@@ -91,6 +91,11 @@ namespace Task.GenericRepository
         //    return results;
         //}
 
+        public async Task<TC> FirstOrDefaultAsync(Expression<Func<TC, bool>> predicate)
+        {
+            return await DbSet.FirstOrDefaultAsync(predicate);
+        }
+
         private IQueryable<TC> GetAllIncluding(params Expression<Func<TC, object>>[] includeProperties)
         {
             IQueryable<TC> queryable = DbSet.AsNoTracking();

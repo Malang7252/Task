@@ -11,6 +11,8 @@ namespace Task.GenericRepository
         IQueryable<TC> All { get; }
         IQueryable<TC> AllIncluding(params Expression<Func<TC, object>>[] includeProperties);
         //Task<IEnumerable<TC>> AllIncludingAsync(params Expression<Func<TC, object>>[] includeProperties);
+        Task<TC> FirstOrDefaultAsync(Expression<Func<TC, bool>> predicate); // New FirstOrDefaultAsync method
+
         IQueryable<TC> FindByInclude(Expression<Func<TC, bool>> predicate, params Expression<Func<TC, object>>[] includeProperties);
         //Task<IEnumerable<TC>> FindByIncludeAsync(Expression<Func<TC, bool>> predicate, params Expression<Func<TC, object>>[] includeProperties);
         IQueryable<TC> FindBy(Expression<Func<TC, bool>> predicate);

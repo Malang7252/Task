@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Task.Service.Mappings;
+using Task.Service.Services.Authentications;
 
 namespace Task.API.Extensions
 {
@@ -7,7 +8,7 @@ namespace Task.API.Extensions
     {
         public static void AddServices(this IServiceCollection services)
         {
-
+            services.AddScoped<IAuthService, AuthService>();
         }
 
 
