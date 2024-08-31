@@ -8,6 +8,7 @@ namespace Task.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientController : BaseController
     {
         private readonly IClientService _clientService;
@@ -43,6 +44,8 @@ namespace Task.API.Controllers
 
         [HttpGet]
         [Route("GetById/{clientId:guid}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> GetClientById(Guid clientId)
         {
             var response = await _clientService.GetClientByIdAsync(clientId);
@@ -51,6 +54,8 @@ namespace Task.API.Controllers
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize(Roles = "Admin")]
+
         // GET : /api/Client?filterOn=FirstName&filterQuery=Nouman&sortBy=FirstName&IsAscending=true&pageNumber=1&pagesize=10
         public async Task<IActionResult> GetAllClients([FromQuery] string? filterOn, [FromQuery] string? filterQuery ,
             [FromQuery] string? sortBy, [FromQuery] bool? IsAscending ,
@@ -66,6 +71,8 @@ namespace Task.API.Controllers
 
         [HttpGet]
         [Route("GetWithDetails/{clientId:guid}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> GetClientWithDetails(Guid clientId)
         {
             var clientDto = await _clientService.GetClientWithDetailsAsync(clientId);

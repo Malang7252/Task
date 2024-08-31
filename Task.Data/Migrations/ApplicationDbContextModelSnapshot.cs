@@ -261,17 +261,17 @@ namespace Task.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4151c85f-8fb1-4ea5-9f58-ad261dda1a73"),
+                            Id = new Guid("c1e2ab0c-806d-472c-88b6-b3dc8b37ee42"),
                             AccountNumber = "1234567890",
                             Balance = 1000m,
-                            ClientId = new Guid("456b19ac-73d5-47a3-b79b-143e09816f5e")
+                            ClientId = new Guid("1889bb43-9ccb-4960-93f1-06b8c20fa93a")
                         },
                         new
                         {
-                            Id = new Guid("fade15be-a349-4574-9bdf-5ef8cfe05699"),
+                            Id = new Guid("bd51f9cc-fc6f-4992-bc45-a50b1e5cf398"),
                             AccountNumber = "0987654321",
                             Balance = 500m,
-                            ClientId = new Guid("adc2a3a9-ec81-43a4-8421-e0fb71c79c4a")
+                            ClientId = new Guid("8c1f0f20-fc33-4705-9d6e-07960d9298c2")
                         });
                 });
 
@@ -309,18 +309,18 @@ namespace Task.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("684b0f45-c589-41b9-9ff9-5ca66689074e"),
+                            Id = new Guid("ec4e2867-b208-4906-a9fa-3e406d2339f4"),
                             City = "New York",
-                            ClientId = new Guid("456b19ac-73d5-47a3-b79b-143e09816f5e"),
+                            ClientId = new Guid("1889bb43-9ccb-4960-93f1-06b8c20fa93a"),
                             Country = "USA",
                             Street = "123 Main St",
                             ZipCode = "10001"
                         },
                         new
                         {
-                            Id = new Guid("ad105b8b-9f1c-4be0-931b-27bf277234dd"),
+                            Id = new Guid("bb46273a-e362-45fb-8de8-64cab2651ab8"),
                             City = "Toronto",
-                            ClientId = new Guid("adc2a3a9-ec81-43a4-8421-e0fb71c79c4a"),
+                            ClientId = new Guid("8c1f0f20-fc33-4705-9d6e-07960d9298c2"),
                             Country = "Canada",
                             Street = "456 Maple Ave",
                             ZipCode = "M5V 2T6"
@@ -368,7 +368,7 @@ namespace Task.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("456b19ac-73d5-47a3-b79b-143e09816f5e"),
+                            Id = new Guid("1889bb43-9ccb-4960-93f1-06b8c20fa93a"),
                             Email = "john.doe@example.com",
                             FirstName = "John",
                             LastName = "Doe",
@@ -379,7 +379,7 @@ namespace Task.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("adc2a3a9-ec81-43a4-8421-e0fb71c79c4a"),
+                            Id = new Guid("8c1f0f20-fc33-4705-9d6e-07960d9298c2"),
                             Email = "jane.smith@example.com",
                             FirstName = "Jane",
                             LastName = "Smith",

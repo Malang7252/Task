@@ -232,8 +232,8 @@ namespace Task.Data.Migrations
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "MobileNumber", "PersonalId", "ProfilePhoto", "Sex" },
                 values: new object[,]
                 {
-                    { new Guid("456b19ac-73d5-47a3-b79b-143e09816f5e"), "john.doe@example.com", "John", "Doe", "+11234567890", "12345678901", "john_doe_profile.jpg", "Male" },
-                    { new Guid("adc2a3a9-ec81-43a4-8421-e0fb71c79c4a"), "jane.smith@example.com", "Jane", "Smith", "+19876543210", "10987654321", "jane_smith_profile.jpg", "Female" }
+                    { new Guid("1889bb43-9ccb-4960-93f1-06b8c20fa93a"), "john.doe@example.com", "John", "Doe", "+11234567890", "12345678901", "john_doe_profile.jpg", "Male" },
+                    { new Guid("8c1f0f20-fc33-4705-9d6e-07960d9298c2"), "jane.smith@example.com", "Jane", "Smith", "+19876543210", "10987654321", "jane_smith_profile.jpg", "Female" }
                 });
 
             migrationBuilder.InsertData(
@@ -241,8 +241,8 @@ namespace Task.Data.Migrations
                 columns: new[] { "Id", "AccountNumber", "Balance", "ClientId" },
                 values: new object[,]
                 {
-                    { new Guid("4151c85f-8fb1-4ea5-9f58-ad261dda1a73"), "1234567890", 1000m, new Guid("456b19ac-73d5-47a3-b79b-143e09816f5e") },
-                    { new Guid("fade15be-a349-4574-9bdf-5ef8cfe05699"), "0987654321", 500m, new Guid("adc2a3a9-ec81-43a4-8421-e0fb71c79c4a") }
+                    { new Guid("bd51f9cc-fc6f-4992-bc45-a50b1e5cf398"), "0987654321", 500m, new Guid("8c1f0f20-fc33-4705-9d6e-07960d9298c2") },
+                    { new Guid("c1e2ab0c-806d-472c-88b6-b3dc8b37ee42"), "1234567890", 1000m, new Guid("1889bb43-9ccb-4960-93f1-06b8c20fa93a") }
                 });
 
             migrationBuilder.InsertData(
@@ -250,8 +250,8 @@ namespace Task.Data.Migrations
                 columns: new[] { "Id", "City", "ClientId", "Country", "Street", "ZipCode" },
                 values: new object[,]
                 {
-                    { new Guid("684b0f45-c589-41b9-9ff9-5ca66689074e"), "New York", new Guid("456b19ac-73d5-47a3-b79b-143e09816f5e"), "USA", "123 Main St", "10001" },
-                    { new Guid("ad105b8b-9f1c-4be0-931b-27bf277234dd"), "Toronto", new Guid("adc2a3a9-ec81-43a4-8421-e0fb71c79c4a"), "Canada", "456 Maple Ave", "M5V 2T6" }
+                    { new Guid("bb46273a-e362-45fb-8de8-64cab2651ab8"), "Toronto", new Guid("8c1f0f20-fc33-4705-9d6e-07960d9298c2"), "Canada", "456 Maple Ave", "M5V 2T6" },
+                    { new Guid("ec4e2867-b208-4906-a9fa-3e406d2339f4"), "New York", new Guid("1889bb43-9ccb-4960-93f1-06b8c20fa93a"), "USA", "123 Main St", "10001" }
                 });
 
             migrationBuilder.CreateIndex(

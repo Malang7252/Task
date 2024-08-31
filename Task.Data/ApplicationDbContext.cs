@@ -25,22 +25,22 @@ namespace Task.Data
             base.OnModelCreating(builder);
 
             // Seed Roles
-            var readerRoleId = "c3129a50-6964-4e12-bff9-9ae3eb32c692";
-            var writerRoleId = "5bd1711f-38cc-47ce-960b-242d82b86a18";
+            var userRoleId = "c3129a50-6964-4e12-bff9-9ae3eb32c692";
+            var adminRoleId = "5bd1711f-38cc-47ce-960b-242d82b86a18";
 
             var roles = new List<IdentityRole>
         {
             new IdentityRole
             {
-                Id = readerRoleId,
-                ConcurrencyStamp = readerRoleId,
+                Id = userRoleId,
+                ConcurrencyStamp = userRoleId,
                 Name = "User",
                 NormalizedName = "USER",
             },
             new IdentityRole
             {
-                Id = writerRoleId,
-                ConcurrencyStamp = writerRoleId,
+                Id = adminRoleId,
+                ConcurrencyStamp = adminRoleId,
                 Name = "Admin",
                 NormalizedName = "ADMIN",
             }
