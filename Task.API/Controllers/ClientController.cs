@@ -69,6 +69,8 @@ namespace Task.API.Controllers
         }
 
 
+
+
         [HttpGet]
         [Route("GetWithDetails/{clientId:guid}")]
         [Authorize(Roles = "Admin")]
@@ -78,5 +80,8 @@ namespace Task.API.Controllers
             var clientDto = await _clientService.GetClientWithDetailsAsync(clientId);
             return Ok(clientDto);
         }
+
+
+
     }
 }

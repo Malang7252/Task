@@ -19,6 +19,9 @@ namespace Task.API.Extensions
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IClientService, ClientService>();
+
+            // Register memory cache
+            services.AddMemoryCache();
         }
 
 

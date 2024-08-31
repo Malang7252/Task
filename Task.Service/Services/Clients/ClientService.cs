@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,13 @@ namespace Task.Service.Services.Clients
     {
         private readonly IClientRepository _clientRepository;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache cache;
 
-        public ClientService(IClientRepository clientRepository, IMapper mapper)
+        public ClientService(IClientRepository clientRepository, IMapper mapper , IMemoryCache cache)
         {
             _clientRepository = clientRepository;
             _mapper = mapper;
+            this.cache = cache;
         }
 
 
@@ -76,6 +79,10 @@ namespace Task.Service.Services.Clients
                 _clientRepository.Remove(clientEntity); 
                 await _clientRepository.SaveAsync();
 
+                // Invalidate the cache
+                cache.Remove(GenerateCacheKey(null, null, null, true, 1, 1000));
+
+
                 return ServiceResponse<bool>.ReturnResultWith204();
             }
             catch (Exception ex)
@@ -103,14 +110,23 @@ namespace Task.Service.Services.Clients
         }
 
         public async Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync(
-            string? filterOn = null, string? filterQuery = null,
-            string? sortBy = null, bool isAscending = true , int pageNumber = 1, int pageSize = 1000)
+                string? filterOn = null, string? filterQuery = null,
+                string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
         {
             try
             {
-                // Include related Address data
+                // Generate a unique cache key based on the search parameters
+                var cacheKey = GenerateCacheKey(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
+
+                // Attempt to retrieve the cached result
+                if (cache.TryGetValue(cacheKey, out IEnumerable<ClientDto> cachedClients))
+                {
+                    return ServiceResponse<IEnumerable<ClientDto>>.ReturnResultWith200(cachedClients);
+                }
+
+                // If not found in cache, proceed with the database query
                 var clientQuery = _clientRepository.All
-                    .Include(c => c.Addresses) // Assuming Addresses is a navigation property
+                    .Include(c => c.Addresses)
                     .AsQueryable();
 
                 // Filtering
@@ -132,7 +148,6 @@ namespace Task.Service.Services.Clients
                     {
                         clientQuery = clientQuery.Where(x => x.Addresses.Any(a => a.City.ToLower().Contains(filterQuery.ToLower())));
                     }
-
                 }
 
                 // Sorting
@@ -158,13 +173,19 @@ namespace Task.Service.Services.Clients
                     }
                 }
 
-                // Paginatiom 
+                // Pagination
                 var skipResults = (pageNumber - 1) * pageSize;
-
 
                 // Execute the query and fetch the filtered and sorted clients
                 var clientEntities = await clientQuery.Skip(skipResults).Take(pageSize).ToListAsync();
                 var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(clientEntities);
+
+                // Store the result in the cache
+                cache.Set(cacheKey, clientDtos, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // Adjust as necessary
+                });
+
                 return ServiceResponse<IEnumerable<ClientDto>>.ReturnResultWith200(clientDtos);
             }
             catch (Exception ex)
@@ -172,6 +193,7 @@ namespace Task.Service.Services.Clients
                 return ServiceResponse<IEnumerable<ClientDto>>.ReturnException(ex);
             }
         }
+
 
 
 
@@ -189,6 +211,14 @@ namespace Task.Service.Services.Clients
         }
 
 
+
+
+
+        // Cache key generation helper method
+        private string GenerateCacheKey(string? filterOn, string? filterQuery, string? sortBy, bool isAscending, int pageNumber, int pageSize)
+        {
+            return $"ClientList_{filterOn}_{filterQuery}_{sortBy}_{isAscending}_{pageNumber}_{pageSize}";
+        }
 
 
 
