@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,8 @@ namespace Task.Service.Services.Clients
         // Retrieves a Client by ID
         Task<ServiceResponse<ClientDto>> GetClientByIdAsync(Guid clientId);
         // Retrieves all Clients
-        Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync();
+        Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync(string? filterOn = null , string? filterQuery = null, 
+            string? sortBy = null,  bool IsAscending = true , int pageNumber = 1 , int pageSize = 1000 );
         // Retrieves a Client along with related Addresses and Accounts
         Task<ClientDto> GetClientWithDetailsAsync(Guid clientId);
     }

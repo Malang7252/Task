@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Task.Service.Dtos.Client;
 using Task.Service.Services.Clients;
@@ -50,11 +51,18 @@ namespace Task.API.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetAllClients()
+        // GET : /api/Client?filterOn=FirstName&filterQuery=Nouman&sortBy=FirstName&IsAscending=true&pageNumber=1&pagesize=10
+        public async Task<IActionResult> GetAllClients([FromQuery] string? filterOn, [FromQuery] string? filterQuery ,
+            [FromQuery] string? sortBy, [FromQuery] bool? IsAscending ,
+            [FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 1000)
         {
-            var response = await _clientService.GetAllClientsAsync();
+            // Call service to get clients based on filters
+            var response = await _clientService.GetAllClientsAsync(filterOn, filterQuery , sortBy , IsAscending ?? true , pageNumber , pageSize);
+
+            // Return formatted response
             return ReturnFormattedResponse(response);
         }
+
 
         [HttpGet]
         [Route("GetWithDetails/{clientId:guid}")]

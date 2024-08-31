@@ -73,7 +73,7 @@ namespace Task.Service.Services.Clients
                 if (clientEntity == null)
                     return ServiceResponse<bool>.Return404();
 
-                _clientRepository.Delete(clientId); ;
+                _clientRepository.Remove(clientEntity); 
                 await _clientRepository.SaveAsync();
 
                 return ServiceResponse<bool>.ReturnResultWith204();
@@ -102,11 +102,68 @@ namespace Task.Service.Services.Clients
             }
         }
 
-        public async Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync()
+        public async Task<ServiceResponse<IEnumerable<ClientDto>>> GetAllClientsAsync(
+            string? filterOn = null, string? filterQuery = null,
+            string? sortBy = null, bool isAscending = true , int pageNumber = 1, int pageSize = 1000)
         {
             try
             {
-                var clientEntities = await _clientRepository.All.ToListAsync();
+                // Include related Address data
+                var clientQuery = _clientRepository.All
+                    .Include(c => c.Addresses) // Assuming Addresses is a navigation property
+                    .AsQueryable();
+
+                // Filtering
+                if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+                {
+                    if (filterOn.Equals("FirstName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        clientQuery = clientQuery.Where(x => x.FirstName.ToLower().Contains(filterQuery.ToLower()));
+                    }
+                    else if (filterOn.Equals("LastName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        clientQuery = clientQuery.Where(x => x.LastName.ToLower().Contains(filterQuery.ToLower()));
+                    }
+                    else if (filterOn.Equals("Country", StringComparison.OrdinalIgnoreCase))
+                    {
+                        clientQuery = clientQuery.Where(x => x.Addresses.Any(a => a.Country.ToLower().Contains(filterQuery.ToLower())));
+                    }
+                    else if (filterOn.Equals("City", StringComparison.OrdinalIgnoreCase))
+                    {
+                        clientQuery = clientQuery.Where(x => x.Addresses.Any(a => a.City.ToLower().Contains(filterQuery.ToLower())));
+                    }
+
+                }
+
+                // Sorting
+                if (!string.IsNullOrWhiteSpace(sortBy))
+                {
+                    switch (sortBy.ToLower())
+                    {
+                        case "firstname":
+                            clientQuery = isAscending ? clientQuery.OrderBy(x => x.FirstName) : clientQuery.OrderByDescending(x => x.FirstName);
+                            break;
+                        case "lastname":
+                            clientQuery = isAscending ? clientQuery.OrderBy(x => x.LastName) : clientQuery.OrderByDescending(x => x.LastName);
+                            break;
+                        case "country":
+                            clientQuery = isAscending ? clientQuery.OrderBy(x => x.Addresses.FirstOrDefault().Country) : clientQuery.OrderByDescending(x => x.Addresses.FirstOrDefault().Country);
+                            break;
+                        case "city":
+                            clientQuery = isAscending ? clientQuery.OrderBy(x => x.Addresses.FirstOrDefault().City) : clientQuery.OrderByDescending(x => x.Addresses.FirstOrDefault().City);
+                            break;
+                        case "zipcode":
+                            clientQuery = isAscending ? clientQuery.OrderBy(x => x.Addresses.FirstOrDefault().ZipCode) : clientQuery.OrderByDescending(x => x.Addresses.FirstOrDefault().ZipCode);
+                            break;
+                    }
+                }
+
+                // Paginatiom 
+                var skipResults = (pageNumber - 1) * pageSize;
+
+
+                // Execute the query and fetch the filtered and sorted clients
+                var clientEntities = await clientQuery.Skip(skipResults).Take(pageSize).ToListAsync();
                 var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(clientEntities);
                 return ServiceResponse<IEnumerable<ClientDto>>.ReturnResultWith200(clientDtos);
             }
@@ -115,6 +172,9 @@ namespace Task.Service.Services.Clients
                 return ServiceResponse<IEnumerable<ClientDto>>.ReturnException(ex);
             }
         }
+
+
+
 
 
         public async Task<ClientDto> GetClientWithDetailsAsync(Guid clientId)

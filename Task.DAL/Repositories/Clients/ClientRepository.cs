@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,8 @@ namespace Task.DAL.Repositories.Clients
         {
             this.dbContext = dbContext;
         }
+
+        public IQueryable<Client> All => DbSet; // Ensure this points to the correct DbSet
 
 
     }
