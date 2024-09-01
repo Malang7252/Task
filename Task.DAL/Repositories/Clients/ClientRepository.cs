@@ -19,7 +19,7 @@ namespace Task.DAL.Repositories.Clients
             this.dbContext = dbContext;
         }
 
-        public IQueryable<Client> All => DbSet; // Ensure this points to the correct DbSet
+        public IQueryable<Client> All => DbSet; 
 
 
     }

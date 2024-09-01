@@ -23,5 +23,7 @@ namespace Task.Service.Services.Clients
             string? sortBy = null,  bool IsAscending = true , int pageNumber = 1 , int pageSize = 1000 );
 
         Task<ClientDto> GetClientWithDetailsAsync(Guid clientId);
+
+        Task<ServiceResponse<IEnumerable<SuggestionDto>>> GetLastThreeClientsAsync();
     }
 }

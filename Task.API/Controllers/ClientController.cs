@@ -79,5 +79,18 @@ namespace Task.API.Controllers
             return Ok(clientDto);
         }
 
+        [HttpGet("Suggestion")]
+        public async Task<IActionResult> GetLastThreeClients()
+        {
+            var response = await _clientService.GetLastThreeClientsAsync();
+
+            if (!response.Success)
+            {
+                return StatusCode(response.StatusCode, response.Errors);
+            }
+
+            return Ok(response.Data);
+        }
+
     }
 }

@@ -11,7 +11,7 @@ namespace Task.Service.Services.Addresses
     public interface IAddressService
     {
         Task<ServiceResponse<AddressDto>> CreateAddressAsync(AddressDto addressDto);
-        Task<ServiceResponse<AddressDto>> UpdateAddressAsync(AddressDto addressDto);
+        Task<ServiceResponse<UpdateAddressRequestDto>> UpdateAddressAsync(UpdateAddressRequestDto requestDto);
         Task<ServiceResponse<bool>> DeleteAddressAsync(Guid addressId);
         Task<ServiceResponse<AddressDto>> GetAddressByIdAsync(Guid addressId);
         Task<ServiceResponse<IEnumerable<AddressDto>>> GetAllAddressesAsync();

@@ -203,6 +203,25 @@ namespace Task.Service.Services.Clients
             return $"ClientList_{filterOn}_{filterQuery}_{sortBy}_{isAscending}_{pageNumber}_{pageSize}";
         }
 
+        public async Task<ServiceResponse<IEnumerable<SuggestionDto>>> GetLastThreeClientsAsync()
+        {
+            try
+            {
+                var clientEntities = await _clientRepository.All
+                    .Include(c => c.Addresses)
+                    .Include(c => c.Accounts)
+                    .OrderBy(c => c.Id)
+                    .Take(3)
+                    .ToListAsync();
+
+                var suggestdto = _mapper.Map<IEnumerable<SuggestionDto>>(clientEntities);
+                return ServiceResponse<IEnumerable<SuggestionDto>>.ReturnResultWith200(suggestdto);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResponse<IEnumerable<SuggestionDto>>.ReturnException(ex);
+            }
+        }
 
     }
 }

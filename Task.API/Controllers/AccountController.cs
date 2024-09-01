@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Task.Service.Dtos.Accounts;
 using Task.Service.Services.Accounts;
@@ -7,6 +8,8 @@ namespace Task.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
@@ -24,9 +27,9 @@ namespace Task.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAccount([FromBody] AccountDto accountDto)
+        public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccountRequestDto requestDto)
         {
-            var response = await _accountService.UpdateAccountAsync(accountDto);
+            var response = await _accountService.UpdateAccountAsync(requestDto);
             return ReturnFormattedResponse(response);
         }
 

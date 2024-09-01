@@ -39,24 +39,24 @@ namespace Task.Service.Services.Accounts
             }
         }
 
-        public async Task<ServiceResponse<AccountDto>> UpdateAccountAsync(AccountDto accountDto)
+        public async Task<ServiceResponse<UpdateAccountRequestDto>> UpdateAccountAsync(UpdateAccountRequestDto requestDto)
         {
             try
             {
-                var accountEntity = await _accountRepository.FindAsync(accountDto.Id);
+                var accountEntity = await _accountRepository.FindAsync(requestDto.Id);
                 if (accountEntity == null)
-                    return ServiceResponse<AccountDto>.Return404();
+                    return ServiceResponse<UpdateAccountRequestDto>.Return404();
 
-                _mapper.Map(accountDto, accountEntity);
+                _mapper.Map(requestDto, accountEntity);
                 _accountRepository.Update(accountEntity);
                 await _accountRepository.SaveAsync();
 
-                var updatedAccountDto = _mapper.Map<AccountDto>(accountEntity);
-                return ServiceResponse<AccountDto>.ReturnResultWith200(updatedAccountDto);
+                var updatedAccountDto = _mapper.Map<UpdateAccountRequestDto>(accountEntity);
+                return ServiceResponse<UpdateAccountRequestDto>.ReturnResultWith200(updatedAccountDto);
             }
             catch (Exception ex)
             {
-                return ServiceResponse<AccountDto>.ReturnException(ex);
+                return ServiceResponse<UpdateAccountRequestDto>.ReturnException(ex);
             }
         }
 

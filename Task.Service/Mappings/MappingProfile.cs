@@ -26,7 +26,16 @@ namespace Task.Service.Mappings
             CreateMap<Address, AddressDto>()
                 .ReverseMap();
 
+            CreateMap<Address ,UpdateAddressRequestDto>()
+                .ReverseMap();
+
             CreateMap<Account, AccountDto>()
+                .ReverseMap();
+
+            CreateMap<Account ,UpdateAccountRequestDto>()
+                .ReverseMap();
+
+            CreateMap<Client, SuggestionDto>()
                 .ReverseMap();
         }
     }

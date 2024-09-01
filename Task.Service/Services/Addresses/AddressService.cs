@@ -42,24 +42,24 @@ namespace Task.Service.Services.Addresses
             }
         }
 
-        public async Task<ServiceResponse<AddressDto>> UpdateAddressAsync(AddressDto addressDto)
+        public async Task<ServiceResponse<UpdateAddressRequestDto>> UpdateAddressAsync(UpdateAddressRequestDto requestDto)
         {
             try
             {
-                var addressEntity = await _addressRepository.FindAsync(addressDto.Id);
+                var addressEntity = await _addressRepository.FindAsync(requestDto.Id);
                 if (addressEntity == null)
-                    return ServiceResponse<AddressDto>.Return404();
+                    return ServiceResponse<UpdateAddressRequestDto>.Return404();
 
-                _mapper.Map(addressDto, addressEntity);
+                _mapper.Map(requestDto, addressEntity);
                 _addressRepository.Update(addressEntity);
                 await _addressRepository.SaveAsync();
 
-                var updatedAddressDto = _mapper.Map<AddressDto>(addressEntity);
-                return ServiceResponse<AddressDto>.ReturnResultWith200(updatedAddressDto);
+                var updatedAddressDto = _mapper.Map<UpdateAddressRequestDto>(addressEntity);
+                return ServiceResponse<UpdateAddressRequestDto>.ReturnResultWith200(requestDto);
             }
             catch (Exception ex)
             {
-                return ServiceResponse<AddressDto>.ReturnException(ex);
+                return ServiceResponse<UpdateAddressRequestDto>.ReturnException(ex);
             }
         }
 

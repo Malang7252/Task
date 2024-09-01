@@ -11,8 +11,7 @@ namespace Task.Service.Services.Accounts
     public interface IAccountService
     {
         Task<ServiceResponse<AccountDto>> CreateAccountAsync(AccountDto accountDto);
-
-        Task<ServiceResponse<AccountDto>> UpdateAccountAsync(AccountDto accountDto);
+        Task<ServiceResponse<UpdateAccountRequestDto>> UpdateAccountAsync(UpdateAccountRequestDto requestDto);
         Task<ServiceResponse<bool>> DeleteAccountAsync(Guid accountId);
         Task<ServiceResponse<AccountDto>> GetAccountByIdAsync(Guid accountId);
         Task<ServiceResponse<IEnumerable<AccountDto>>> GetAllAccountsAsync();

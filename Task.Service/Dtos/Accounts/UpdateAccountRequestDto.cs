@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Task.Service.Dtos.Accounts
 {
-    public class AccountDto
+    public class UpdateAccountRequestDto
     {
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Account number is required.")]
         public string AccountNumber { get; set; }

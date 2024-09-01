@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Task.Service.Dtos.Address
 {
-    public class AddressDto
+    public class UpdateAddressRequestDto
     {
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Country is required.")]
         public string Country { get; set; }
