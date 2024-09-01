@@ -19,14 +19,15 @@ namespace Task.Service.Mappings
                   .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses))
                   .ForMember(dest => dest.Accounts, opt => opt.MapFrom(src => src.Accounts));
 
+            CreateMap<ClientDto, Client>()
+            .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses))
+            .ForMember(dest => dest.Accounts, opt => opt.MapFrom(src => src.Accounts));
 
+            CreateMap<Address, AddressDto>()
+                .ReverseMap();
 
-            CreateMap<Address, AddressDto>();
-            CreateMap<Account, AccountDto>();
-
-            CreateMap<ClientDto, Client>();
-            CreateMap<AddressDto, Address>();
-            CreateMap<AccountDto, Account>();
+            CreateMap<Account, AccountDto>()
+                .ReverseMap();
         }
     }
 }

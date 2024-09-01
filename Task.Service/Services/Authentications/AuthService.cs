@@ -25,30 +25,24 @@ namespace Task.Service.Services.Authentications
             this.configuration = configuration;
         }
 
-
         public async Task<ServiceResponse<string>> Register(RegisterDto registerDto)
         {
-            // Create a new IdentityUser
             var user = new IdentityUser
             { 
                 UserName = registerDto.UserName,
                 Email = registerDto.UserName
             };
 
-            // Attempt to create the user
             var result = await userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)
             {
-                // Check if roles are provided
                 if (registerDto.Roles != null && registerDto.Roles.Any())
                 {
                     foreach (var role in registerDto.Roles)
                     {
-                        // Assign each role to the user
                         var roleResult = await userManager.AddToRoleAsync(user, role);
 
-                        // If assigning any role fails, return an error response
                         if (!roleResult.Succeeded)
                         {
                             return ServiceResponse<string>.ReturnFailed(400, "Failed to add roles to the user.");
@@ -56,35 +50,26 @@ namespace Task.Service.Services.Authentications
                     }
                 }
 
-                // Return success response
                 return ServiceResponse<string>.ReturnResultWith200("User was registered successfully! Please log in.");
             }
 
-            // Return error response if user creation fails
             return ServiceResponse<string>.ReturnFailed(400, "Something went wrong.");
         }
 
-
-
-        // Login 
-
         public async Task<ServiceResponse<string>> Login(LoginDto loginDto)
         {
-            // Find the user by email (used as the username here)
             var user = await userManager.FindByEmailAsync(loginDto.UserName);
 
             if (user != null)
             {
-                // Check if the password is correct
                 var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginDto.Password);
 
                 if (checkPasswordResult)
                 {
-                    // Get roles for user
                     var roles = await userManager.GetRolesAsync(user);
                     if (roles != null && roles.Any())
                     {
-                        // Create a JWT Token
+                      
                         var jwtTokenResponse = CreateJwtToken(user, roles.ToList());
                         if (jwtTokenResponse.Success)
                         {
@@ -104,16 +89,8 @@ namespace Task.Service.Services.Authentications
                 }
             }
 
-            // Return an error response if the credentials are incorrect
             return ServiceResponse<string>.ReturnFailed(401, "Username or password is incorrect.");
         }
-
-
-
-
-
-
-
 
         public ServiceResponse<string> CreateJwtToken(IdentityUser user, List<string> roles)
         {

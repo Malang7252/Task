@@ -25,7 +25,6 @@ namespace Task.API.Controllers
             return ReturnFormattedResponse(response);
         }
 
-
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Task.Models.Entities;
@@ -12,9 +13,9 @@ namespace Task.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<Client> Clients { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -23,7 +24,17 @@ namespace Task.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<Client>()
+                .HasMany(c => c.Addresses)
+                .WithOne(a => a.Client)
+                .HasForeignKey(a => a.ClientId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Client>()
+                .HasMany(c => c.Accounts)
+                .WithOne(a => a.Client)
+                .HasForeignKey(a => a.ClientId)
+                .OnDelete(DeleteBehavior.Cascade);
             // Seed Roles
             var userRoleId = "c3129a50-6964-4e12-bff9-9ae3eb32c692";
             var adminRoleId = "5bd1711f-38cc-47ce-960b-242d82b86a18";
@@ -124,8 +135,6 @@ namespace Task.Data
         };
             builder.Entity<Account>().HasData(accounts);
         }
-
-
 
     }
 }

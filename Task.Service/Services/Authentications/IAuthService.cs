@@ -18,8 +18,5 @@ namespace Task.Service.Services.Authentications
 
         ServiceResponse<string> CreateJwtToken(IdentityUser user, List<string> roles);
 
-
-
-
     }
 }

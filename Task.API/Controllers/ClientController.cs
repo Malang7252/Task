@@ -58,8 +58,8 @@ namespace Task.API.Controllers
 
         // GET : /api/Client?filterOn=FirstName&filterQuery=Nouman&sortBy=FirstName&IsAscending=true&pageNumber=1&pagesize=10
         public async Task<IActionResult> GetAllClients([FromQuery] string? filterOn, [FromQuery] string? filterQuery ,
-            [FromQuery] string? sortBy, [FromQuery] bool? IsAscending ,
-            [FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 1000)
+        [FromQuery] string? sortBy, [FromQuery] bool? IsAscending ,
+        [FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 1000)
         {
             // Call service to get clients based on filters
             var response = await _clientService.GetAllClientsAsync(filterOn, filterQuery , sortBy , IsAscending ?? true , pageNumber , pageSize);
@@ -67,8 +67,6 @@ namespace Task.API.Controllers
             // Return formatted response
             return ReturnFormattedResponse(response);
         }
-
-
 
 
         [HttpGet]
@@ -80,8 +78,6 @@ namespace Task.API.Controllers
             var clientDto = await _clientService.GetClientWithDetailsAsync(clientId);
             return Ok(clientDto);
         }
-
-
 
     }
 }

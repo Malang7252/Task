@@ -26,13 +26,13 @@ namespace Task.Service.Services.Clients
             this.cache = cache;
         }
 
-
-
-       public async Task<ServiceResponse<ClientDto>> CreateClientAsync(ClientDto clientDto)
+        public async Task<ServiceResponse<ClientDto>> CreateClientAsync(ClientDto clientDto)
         {
             try
             {
                 var clientDomain = _mapper.Map<Client>(clientDto);
+
+                clientDomain.Id = Guid.NewGuid();
 
                 _clientRepository.Add(clientDomain);
                 await _clientRepository.SaveAsync();
@@ -79,7 +79,6 @@ namespace Task.Service.Services.Clients
                 _clientRepository.Remove(clientEntity); 
                 await _clientRepository.SaveAsync();
 
-                // Invalidate the cache
                 cache.Remove(GenerateCacheKey(null, null, null, true, 1, 1000));
 
 
@@ -115,16 +114,13 @@ namespace Task.Service.Services.Clients
         {
             try
             {
-                // Generate a unique cache key based on the search parameters
                 var cacheKey = GenerateCacheKey(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
 
-                // Attempt to retrieve the cached result
                 if (cache.TryGetValue(cacheKey, out IEnumerable<ClientDto> cachedClients))
                 {
                     return ServiceResponse<IEnumerable<ClientDto>>.ReturnResultWith200(cachedClients);
                 }
 
-                // If not found in cache, proceed with the database query
                 var clientQuery = _clientRepository.All
                     .Include(c => c.Addresses)
                     .AsQueryable();
@@ -176,14 +172,12 @@ namespace Task.Service.Services.Clients
                 // Pagination
                 var skipResults = (pageNumber - 1) * pageSize;
 
-                // Execute the query and fetch the filtered and sorted clients
                 var clientEntities = await clientQuery.Skip(skipResults).Take(pageSize).ToListAsync();
                 var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(clientEntities);
 
-                // Store the result in the cache
                 cache.Set(cacheKey, clientDtos, new MemoryCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // Adjust as necessary
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) 
                 });
 
                 return ServiceResponse<IEnumerable<ClientDto>>.ReturnResultWith200(clientDtos);
@@ -193,12 +187,6 @@ namespace Task.Service.Services.Clients
                 return ServiceResponse<IEnumerable<ClientDto>>.ReturnException(ex);
             }
         }
-
-
-
-
-
-
         public async Task<ClientDto> GetClientWithDetailsAsync(Guid clientId)
         {
             var client = await _clientRepository.FindByInclude(
@@ -210,20 +198,10 @@ namespace Task.Service.Services.Clients
             return _mapper.Map<ClientDto>(client);
         }
 
-
-
-
-
-        // Cache key generation helper method
         private string GenerateCacheKey(string? filterOn, string? filterQuery, string? sortBy, bool isAscending, int pageNumber, int pageSize)
         {
             return $"ClientList_{filterOn}_{filterQuery}_{sortBy}_{isAscending}_{pageNumber}_{pageSize}";
         }
-
-
-
-
-
 
 
     }

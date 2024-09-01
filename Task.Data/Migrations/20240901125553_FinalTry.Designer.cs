@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Task.Data;
 
@@ -11,9 +12,11 @@ using Task.Data;
 namespace Task.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240901125553_FinalTry")]
+    partial class FinalTry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,20 +276,20 @@ namespace Task.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d8185acd-32af-4592-9f1e-2d4efacb515a"),
+                            Id = new Guid("00b1b6be-1b8a-45e1-91d2-5cbb4762b422"),
                             AccountNumber = "1234567890",
                             Balance = 1000m,
-                            ClientId = new Guid("d9d3868e-a002-48fd-8b83-7d4b740b950e"),
-                            CreatedDate = new DateTime(2024, 9, 1, 13, 13, 57, 400, DateTimeKind.Utc).AddTicks(7426),
+                            ClientId = new Guid("a5f81e83-06ec-4f65-9872-7de8707ea955"),
+                            CreatedDate = new DateTime(2024, 9, 1, 12, 55, 53, 106, DateTimeKind.Utc).AddTicks(1553),
                             IsDeleted = false
                         },
                         new
                         {
-                            Id = new Guid("a8b382f6-af66-4908-813b-eeeaa28538ba"),
+                            Id = new Guid("95dcad01-4633-46f0-bc62-c1ad5074396a"),
                             AccountNumber = "0987654321",
                             Balance = 500m,
-                            ClientId = new Guid("5f105c64-fb6d-4c9d-995b-54cb021351f0"),
-                            CreatedDate = new DateTime(2024, 9, 1, 13, 13, 57, 400, DateTimeKind.Utc).AddTicks(7435),
+                            ClientId = new Guid("80a9e596-0f72-498a-9fbf-627df473def0"),
+                            CreatedDate = new DateTime(2024, 9, 1, 12, 55, 53, 106, DateTimeKind.Utc).AddTicks(1560),
                             IsDeleted = false
                         });
                 });
@@ -337,22 +340,22 @@ namespace Task.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2712b292-022a-42d8-89b4-43e2703afabe"),
+                            Id = new Guid("7917158d-88f3-433f-ad5b-7b91377c95f3"),
                             City = "New York",
-                            ClientId = new Guid("d9d3868e-a002-48fd-8b83-7d4b740b950e"),
+                            ClientId = new Guid("a5f81e83-06ec-4f65-9872-7de8707ea955"),
                             Country = "USA",
-                            CreatedDate = new DateTime(2024, 9, 1, 13, 13, 57, 400, DateTimeKind.Utc).AddTicks(7393),
+                            CreatedDate = new DateTime(2024, 9, 1, 12, 55, 53, 106, DateTimeKind.Utc).AddTicks(1523),
                             IsDeleted = false,
                             Street = "123 Main St",
                             ZipCode = "10001"
                         },
                         new
                         {
-                            Id = new Guid("139d7c3c-ab52-4ce0-8a9b-0697b313e8b8"),
+                            Id = new Guid("1fbeac17-f493-499a-95ad-b3b5714cb476"),
                             City = "Toronto",
-                            ClientId = new Guid("5f105c64-fb6d-4c9d-995b-54cb021351f0"),
+                            ClientId = new Guid("80a9e596-0f72-498a-9fbf-627df473def0"),
                             Country = "Canada",
-                            CreatedDate = new DateTime(2024, 9, 1, 13, 13, 57, 400, DateTimeKind.Utc).AddTicks(7398),
+                            CreatedDate = new DateTime(2024, 9, 1, 12, 55, 53, 106, DateTimeKind.Utc).AddTicks(1527),
                             IsDeleted = false,
                             Street = "456 Maple Ave",
                             ZipCode = "M5V 2T6"
@@ -412,8 +415,8 @@ namespace Task.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d9d3868e-a002-48fd-8b83-7d4b740b950e"),
-                            CreatedDate = new DateTime(2024, 9, 1, 13, 13, 57, 400, DateTimeKind.Utc).AddTicks(7359),
+                            Id = new Guid("a5f81e83-06ec-4f65-9872-7de8707ea955"),
+                            CreatedDate = new DateTime(2024, 9, 1, 12, 55, 53, 106, DateTimeKind.Utc).AddTicks(1488),
                             Email = "john.doe@example.com",
                             FirstName = "John",
                             IsDeleted = false,
@@ -425,8 +428,8 @@ namespace Task.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5f105c64-fb6d-4c9d-995b-54cb021351f0"),
-                            CreatedDate = new DateTime(2024, 9, 1, 13, 13, 57, 400, DateTimeKind.Utc).AddTicks(7365),
+                            Id = new Guid("80a9e596-0f72-498a-9fbf-627df473def0"),
+                            CreatedDate = new DateTime(2024, 9, 1, 12, 55, 53, 106, DateTimeKind.Utc).AddTicks(1495),
                             Email = "jane.smith@example.com",
                             FirstName = "Jane",
                             IsDeleted = false,

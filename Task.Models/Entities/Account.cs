@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace Task.Models.Entities
 {
-    public class Account
+    public class Account : BaseModel
     {
         public Guid Id { get; set; }
-
 
         public string AccountNumber { get; set; }
 
@@ -19,10 +18,7 @@ namespace Task.Models.Entities
 
         public Guid ClientId { get; set; }
 
-        // Navigation property with ForeignKey attribute
         [ForeignKey(nameof(ClientId))]
         public Client Client { get; set; }
     }
-
-
 }
